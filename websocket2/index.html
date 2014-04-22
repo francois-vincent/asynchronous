@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        #logbox {
+            border: 1px solid #000;
+            width: 400px;
+            height: 200px;
+            overflow-y: scroll;
+            overflow-x:hidden;
+        }
+    </style>
+</head>
+<body>
+    <h1>Websocket basic test</h1>
+    <hr>
+    <div>
+        <input type='text' id='ws_uri' placeholder="WebSocket Location">
+        <div>
+            <button id="connect" onclick="connect();">Connect</button>
+            <button id="disconnect" onclick="disconnect();" disabled>Disconnect</button>
+        </div>
+    </div>
+    <div>
+        <input type='text' id='message' placeholder="Message">
+        <div>
+            <button id="send" onclick="send();" disabled>Send</button>
+        </div>
+    </div>
+
+    <hr>
+    <div id="logbox">
+
+    </div>
+
+    <script>
+        var ws_preset = 'ws://127.0.0.1:8080/ws'; // try it on ws://echo.websocket.org
+        var button_connect = document.getElementById('connect'),
+            button_disconnect = document.getElementById('disconnect'),
+            button_send = document.getElementById('send'),
+            message = document.getElementById('message'),
+            ws_uri = document.getElementById('ws_uri'),
+            logbox = document.getElementById('logbox');
+        var ws = null;
+        ws_uri.value = ws_preset;
+
+        var connect = function() {
+            button_connect.setAttribute('disabled','');
+            button_disconnect.removeAttribute('disabled');
+            button_send.removeAttribute('disabled');
+            console.log('Connect to: '+ws_uri.value);
+            openWS();
+        }
+        var disconnect = function() {
+            button_connect.removeAttribute('disabled');
+            button_disconnect.setAttribute('disabled','');
+            button_send.setAttribute('disabled','');
+            ws.close();
+            ws = null;
+        }
+        var send = function() {
+            console.log('Send message: '+message.value);
+            ws.send(message.value);
+        }
+
+        var openWS = function() {
+            ws = new WebSocket(ws_uri.value);
+            ws.onopen = function(evt) { log('Open WS: '+ws_uri.value); };
+            ws.onclose = function(evt) { log('Close WS'); };
+            ws.onmessage = function(evt) { log('WS received: '+evt.data); };
+            ws.onerror = function(evt) { log('WS Error'); };
+        }
+        var log = function(message) {
+            logbox.innerHTML += message+'<br>';
+        }
+    </script>
+</body>
+</html>
