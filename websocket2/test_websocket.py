@@ -16,6 +16,7 @@ class SocketHandler(websocket.WebSocketHandler):
     def open(self):
         if self not in cl:
             cl.append(self)
+        print("New connection (%s total)" % len(cl))
 
     def on_message(self, message):
         print("received message <%s>" % message)

@@ -23,7 +23,7 @@
         </div>
     </div>
     <div>
-        <input type='text' id='message' placeholder="Message">
+        <input type='text' id='message' placeholder="Message" onkeypress="if (event.keyCode == 13) send()">
         <div>
             <button id="send" onclick="send();" disabled>Send</button>
         </div>
